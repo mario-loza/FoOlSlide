@@ -97,7 +97,7 @@
 			else
 			{
 				plugin.displayHome();
-			//plugin.display404();
+				//plugin.display404();
 			}
 			
 			if(segments.length > 0 && plugin.settings.googleAnalyticsCode)
@@ -694,8 +694,12 @@
 		// inject and returns the sidebar components
 		plugin.buildSidebar = function(elem) {
 			var echo = '' +
-			'<div class="layer1"></div>' +
-			'<div class	="items">' +
+			'<div class="layer1"></div>' + 
+			'<div class="tools"><ul>' + 
+			'	<li class="home"><a href="">Back to homepage</a></li>' + 
+			'	<li class="search"><input type="text" placeholder="To search, type and hit enter" /><a href="#">Search</a></li>' + 
+			'</ul></div>' +
+			'<div class="items">' +
 			'	<div id="dynamic_sidebar">' +
 			'	</div>' +
 			'<div class="handle" onClick="$.foolslideui.sidebar.toggleSidebar()"></div>' +
@@ -710,10 +714,7 @@
 			
 		plugin.buildContent = function(elem) {
 			var echo = '';
-			echo += '<div class="layer1">' +
-			'</div>' +
-			'<div id="dynamic_content">' +
-			'</div>';
+			echo += '<div id="dynamic_content"></div>';
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_content");
