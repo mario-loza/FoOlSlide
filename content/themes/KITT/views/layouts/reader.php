@@ -72,6 +72,14 @@
 			<header>
 			</header>
 			<div id="main" role="main">
+				<?php
+				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && !get_setting('fs_ads_top_banner_reload'))
+					echo '<div class="banner">' . get_setting('fs_ads_top_banner') . '</div>';
+				?>
+				<?php
+				if (get_setting('fs_ads_top_banner') && get_setting('fs_ads_top_banner_active') && !get_setting('fs_ads_top_banner_reload'))
+					echo '<div class="banner">' . get_setting('fs_ads_top_banner') . '</div>';
+				?>
 			</div>
 			<aside id="sidebar">
 			</aside>

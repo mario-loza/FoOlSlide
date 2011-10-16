@@ -70,7 +70,7 @@
 			if(segments.length > 3) {
 
 				switch(segments[2]) {
-					case "comic":
+					case "series":
 						plugin.displayComic({
 							stub: segments[3]
 						});
@@ -97,7 +97,7 @@
 			else
 			{
 				plugin.displayHome();
-				//plugin.display404();
+			//plugin.display404();
 			}
 			
 			if(segments.length > 0 && plugin.settings.googleAnalyticsCode)
@@ -288,7 +288,7 @@
 			'	<div class="page">' + 
 			'		<img class="displayed" src="" onClick="$.foolslideui.reader.nextPage()">' +
 			'	</div>' +
-			'	<div class="bottombar"></div>' +
+			'	<div class="bottombar">4</div>' +
 			'</div>';
 			
 			
@@ -300,11 +300,13 @@
 						chapter_id: chapterArr.chapters[0].id,
 						slideUrl: chapterArr.chapters[0].slideUrl
 					});
-					plugin.reader.currentChapter = chapterArr.chapters;
+					plugin.reader.currentChapter = chapterArr.chapters[0];
 					plugin.reader.currentComic = chapterArr.comics[0];
 					plugin.reader.currentPages = chapterArr.pages;
 					plugin.reader.currentPage = opt.page;
-					History.pushState(null, null, chapterArr.chapters[0].href)
+					History.pushState(null, null, chapterArr.chapters[0].href);
+					echo = $(echo);
+					echo.find('.topbar').html('<a href="#" onclick="return $.foolslideui.displayComic({id:' + plugin.reader.currentComic.id + '});">' + plugin.reader.currentComic.name  + '</a> » ' + plugin.reader.currentChapter.title);
 					$(this).html(echo);
 					
 					plugin.reader.changePage(opt.page);
@@ -324,7 +326,11 @@
 		plugin.reader = {};
 		
 		plugin.reader.currentPage = 0;
-		plugin.reader.isSpreadPage = 0;
+		plugin.reader.isSpreadPage = false;
+		plugin.reader.isKeydown = false;
+		plugin.reader.isKeydownCode = false;
+		plugin.reader.button37 = 0;
+		plugin.reader.button39 = 0;
 		plugin.reader.currentPages = {};
 		plugin.reader.currentChapter = {};
 		plugin.reader.currentComic = {};
@@ -333,10 +339,12 @@
 		plugin.reader.changePage = function(pgNum) {
 			if (mode.mode != "reader")
 				return false;
-			var pageImgElem = $("#reader .page .displayed");
+			var readerElem = $("#reader");
+			var pageImgElem = readerElem.find(".page .displayed");
 			pageImgElem.attr('src', plugin.reader.currentPages[pgNum-1].url);
 			plugin.reader.currentPage = pgNum;
 			plugin.reader.resizePage(pgNum);
+			plugin.reader.updateNumber(pgNum);			
 		}
 		
 		plugin.reader.resizePage = function (pgNum) {
@@ -346,7 +354,7 @@
 			var imgElem = pageElem.find(".displayed");
 			var id = pgNum - 1;
 			var pages = plugin.reader.currentPages;
-			var doc_width = readerElem.width();
+			var doc_width = $(window).width();
 			var page_width = parseInt(pages[id].width);
 			var page_height = parseInt(pages[id].height);
 			var nice_width = 980;
@@ -378,21 +386,7 @@
 					width = (height*width)/(page_height);
 				}
 				
-				
-				
-				
-				
-				
-				if(pageElem.width() < imgElem.width()) {
-					plugin.reader.isSpreadPage = true;
-				}
-				else {
-					pageElem.css({
-						'max-width': width+10, 
-						'overflow':'hidden'
-					});
-					plugin.reader.isSpreadPage = false;
-				}
+				plugin.reader.isSpreadPage = false;
 			}
 			else{
 				if(page_width < nice_width && doc_width > page_width + 10) {
@@ -405,15 +399,133 @@
 					height = (height*width)/page_width;
 				}
 				
-				
 				plugin.reader.isSpreadPage =  false;
 			}
+			imgElem.attr({
+				'width': width,
+				'height': height
+			});
+
+			pageElem.css({
+				'width': (width + 10) + 'px'
+			});
+			$('#main').scrollTo({top:0, left:9999}, 300);
+		}
+		
+		plugin.reader.updateNumber = function(num) {
+			var bottomElem = $('#reader .bottombar');
+			var pages = plugin.reader.currentPages;
+			var echo = '';
+			var cur = 0;
+			for(var i = - 2; i < 3; i++)
+			{
+				cur = num + i;
+				if(cur > 0 && cur < pages.length + 1)
+				{
+					if(cur == num)
+					{
+						echo += '<span class="current"><a href="#" onclick="return $.foolslideui.reader.changePage(' + cur + ')">' + cur + '</a>/<a href="#" onclick="return $.foolslideui.reader.changePage(' + (pages.length) + ')">' + (pages.length) + '</a></span>';
+					}
+					else
+					{
+						echo += '<a href="#" onclick="return $.foolslideui.reader.changePage(' + cur + ')">' + cur + '</a>';
+					}
+				}
+			}
+			bottomElem.html(echo);
 		}
 		
 		plugin.reader.nextPage = function() {
 			plugin.reader.changePage(plugin.reader.currentPage + 1);
 			return false;
 		}
+		
+		plugin.reader.prevPage = function() {
+			plugin.reader.changePage(plugin.reader.currentPage - 1);
+			return false;
+		}
+		 
+		plugin.reader.keydown = function(e) {
+			if(!plugin.reader.isKeydown && !jQuery("input").is(":focus"))
+			{
+				plugin.reader.isKeydown = true;
+				var code = e.keyCode || e.which;
+				
+				if(e.keyCode==37 || e.keyCode==65)
+				{
+					if(!isSpread) prevPage();
+					else if(e.timeStamp - timeStamp37 < 400 && e.timeStamp - timeStamp37 > 150) prevPage();
+					timeStamp37 = e.timeStamp;
+					e.preventDefault();
+					button_down_code = setInterval(function() { 
+						if (plugin.reader.isKeydown) {
+							jQuery('#page').scrollTo("-=13",{
+								axis:"x"
+							});
+						} 
+					}, 20);
+				}
+				if(e.keyCode==39 || e.keyCode==68) 
+				{
+					if(!isSpread) nextPage();
+					else if(e.timeStamp - timeStamp39 < 400 && e.timeStamp - timeStamp39 > 150) nextPage();
+					timeStamp39 = e.timeStamp;
+					e.preventDefault();
+					button_down_code = setInterval(function() { 
+						if (plugin.reader.isKeydown) {
+							jQuery('#page').scrollTo("+=13",{
+								axis:"x"
+							});
+						} 
+					}, 20);
+				}
+				
+			
+				if(code == 40 || code == 83) 
+				{
+					e.preventDefault();
+					button_down_code = setInterval(function() { 
+						if (plugin.reader.isKeydown) {
+							jQuery.scrollTo("+=13"); 
+						} 
+					}, 20);
+				}
+			
+				if(code == 38 || code == 87) 
+				{
+					e.preventDefault();
+					button_down_code = setInterval(function() {
+						if (button_down) {
+							jQuery.scrollTo("-=13"); 
+						} 
+					}, 20);
+					
+				}
+			}
+		}
+		
+		plugin.reader.keyup =  function(e) {
+			button_down_code = window.clearInterval(button_down_code);
+			button_down = false;
+		}
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		/*
+		 |
+		 | SIDEBAR
+		 | 
+		 */ 
 		 
 		plugin.sidebar = {};
 		
@@ -422,7 +534,7 @@
 			{
 				plugin.sidebar.toggleSidebar(false);
 				$(".foolslideui_content").animate({
-					marginLeft:"25px"
+					marginLeft:"4px"
 				}, 1000);
 				$(".foolslideui_sidebar").hover(function(){
 					plugin.sidebar.toggleSidebar(true)
@@ -465,11 +577,11 @@
 			if(!open)
 			{				
 				$(".foolslideui_content").stop().animate({
-					marginLeft: '25px'
+					marginLeft: '4px'
 				}, 1000);
 				
 				sidebarElem.animate({
-					left: -parseInt(sidebarElem.data('width').replace('px', '')) + 25 + "px"
+					left: -parseInt(sidebarElem.data('width').replace('px', '')) + 5 + "px"
 				}, 1000);
 				sidebarElem.find(".handle").fadeIn(800);
 			}
@@ -704,18 +816,20 @@
 			var echo = '' +
 			'<div class="layer1"></div>' + 
 			'<div class="tools"><ul>' + 
-			'	<li class="home"><a href="">Back to homepage</a></li>' + 
+			'	<li class="home"><a href="#" onclick="$.foolslideui.displayHome()">Back to homepage</a></li>' + 
 			'	<li class="search"><input type="text" /><a href="#">Search</a></li>' + 
 			'</ul></div>' +
 			'<div class="items">' +
 			'	<div id="dynamic_sidebar">' +
 			'	</div>' +
- 			'</div>';
+			'</div>';
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_sidebar");
 				$(elem).html(echo);
-				$(elem).find('.items').css({'max-height': ($(elem).find('.items').height() - $(elem).find('.tools').height()) + 'px'});
+				$(elem).find('.items').css({
+					'max-height': ($(elem).find('.items').height() - $(elem).find('.tools').height()) + 'px'
+				});
 			}
 			return echo;
 		}
@@ -726,7 +840,9 @@
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_content");
-				$(elem).html(echo);
+				if($(elem).find('.banner'))
+					$(elem).find('.banner:eq(0)').after(echo);
+				else $(elem).prepend(echo);
 			}
 		}
 
