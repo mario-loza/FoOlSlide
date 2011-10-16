@@ -139,7 +139,7 @@
 			setTimeout(plugin.sidebar.displayLatest, 0, opt);
 			var count = 0;
 			$.each(latest.chapters, function(index, value){
-				if(count++ == 3) 
+				if(count++ == 5) 
 				{
 					return false;
 				}
@@ -697,7 +697,7 @@
 			'<div class="layer1"></div>' + 
 			'<div class="tools"><ul>' + 
 			'	<li class="home"><a href="">Back to homepage</a></li>' + 
-			'	<li class="search"><input type="text" placeholder="To search, type and hit enter" /><a href="#">Search</a></li>' + 
+			'	<li class="search"><input type="text" /><a href="#">Search</a></li>' + 
 			'</ul></div>' +
 			'<div class="items">' +
 			'	<div id="dynamic_sidebar">' +
@@ -708,6 +708,7 @@
 			{
 				$(elem).addClass("foolslideui_sidebar");
 				$(elem).html(echo);
+				$(elem).find('.items').css({'max-height': ($(elem).find('.items').height() - $(elem).find('.tools').height()) + 'px'});
 			}
 			return echo;
 		}
