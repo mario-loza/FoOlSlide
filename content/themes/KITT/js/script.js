@@ -421,7 +421,7 @@
 			if(bool)
 			{
 				plugin.sidebar.toggleSidebar(false);
-				$(".foolslideui_content").css({
+				$(".foolslideui_content").animate({
 					marginLeft:"25px"
 				}, 1000);
 				$(".foolslideui_sidebar").hover(function(){
@@ -452,6 +452,10 @@
 			sidebarElem.stop(true);
 			if(open)
 			{
+				$(".foolslideui_content").stop().animate({
+					marginLeft: $(".foolslideui_sidebar").data('width')
+				}, 1000);
+				
 				sidebarElem.animate({
 					left:"0px"
 				}, 1000);
@@ -459,7 +463,11 @@
 			}
 			
 			if(!open)
-			{					
+			{				
+				$(".foolslideui_content").stop().animate({
+					marginLeft: '25px'
+				}, 1000);
+				
 				sidebarElem.animate({
 					left: -parseInt(sidebarElem.data('width').replace('px', '')) + 25 + "px"
 				}, 1000);
@@ -702,8 +710,7 @@
 			'<div class="items">' +
 			'	<div id="dynamic_sidebar">' +
 			'	</div>' +
-			'<div class="handle" onClick="$.foolslideui.sidebar.toggleSidebar()"></div>' +
-			'</div>';
+ 			'</div>';
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_sidebar");
