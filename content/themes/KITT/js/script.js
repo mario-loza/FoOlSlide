@@ -840,7 +840,7 @@
 			if(typeof elem != "undefined")
 			{
 				$(elem).addClass("foolslideui_content");
-				if($(elem).find('.banner'))
+				if($(elem).find('.banner').length > 0)
 					$(elem).find('.banner:eq(0)').after(echo);
 				else $(elem).prepend(echo);
 			}
