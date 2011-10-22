@@ -185,7 +185,6 @@
 			}
 		}
 		
-		
 		plugin.displayComic = function(opt) {
 			var def = {
 				returnString: false,
@@ -817,6 +816,7 @@
 			'<div class="layer1"></div>' + 
 			'<div class="tools"><ul>' + 
 			'	<li class="home"><a href="#" onclick="$.foolslideui.displayHome()">Back to homepage</a></li>' + 
+			'	<li class="home"><a href="#" onclick="$.foolslideui.displaySeries()">Series list</a></li>' + 
 			'	<li class="search"><input type="text" /><a href="#">Search</a></li>' + 
 			'</ul></div>' +
 			'<div class="items">' +

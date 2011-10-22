@@ -290,7 +290,7 @@ a, a:hover, a:visited {
 	margin:0;
 }
 
-.foolslideui_sidebar .tools ul .home:hover {
+.foolslideui_sidebar .tools ul .home a:hover {
 	background: -moz-linear-gradient(top, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.55) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.3)), color-stop(100%,rgba(0,0,0,0.55))); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top, rgba(255,255,255,0.3) 0%,rgba(0,0,0,0.55) 100%); /* Chrome10+,Safari5.1+ */
@@ -307,9 +307,16 @@ a, a:hover, a:visited {
 	height:100%;
 }
 
+.foolslideui_sidebar .tools ul .home a {
+	width:50%;
+	float:right;
+	overflow:hidden;
+}
+
 .foolslideui_sidebar .tools .search {
 	text-align:center;
 	padding:6px 10px;
+	overflow:hidden;
 }
 
 .foolslideui_sidebar .tools .search a {
