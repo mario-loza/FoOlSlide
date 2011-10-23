@@ -363,7 +363,7 @@ class Reader extends Public_Controller
 	/**
 	 * Replacing serie with series, for deprecated "serie"...
 	 * 
-	 * @deprecated 0.7 30/07/2011
+	 * @deprecated 0.8.? ??/10/2011
 	 * @author Woxxy
 	 */
 	public function serie($stub = NULL)
