@@ -129,6 +129,7 @@ class Admin_Controller extends MY_Controller
 			"icon" => 160,
 			"content" => array(
 				"general" => array("level" => "admin", "name" => _("General"), "icon" => 129),
+				"configuration" => array("level" => "admin", "name" => _("Configuration"), "icon" => 129),
 			)
 		);
 		$sidebar["system"] = array("name" => _("System"),
