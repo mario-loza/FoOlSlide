@@ -71,8 +71,18 @@ class System extends Admin_Controller
 				'type' => 'input',
 				'name' => 'fs_serv_imagick_path',
 				'placeholder' => '/usr/bin',
-				'preferences' => 'fs_gen',
+				'preferences' => 'fs_serv',
 				'help' => sprintf(_('FoOlSlide uses %s via command line to maximize the processor power for processing images. If ImageMagick %s automatically, enter the location of the "convert" binary on your server in the field above.'), '<a href="#" rel="popover-below" title="ImageMagick" data-content="' . _('This is a library used to dynamically create, edit, compose or convert images.') . '">ImageMagick</a>', '<a href="#" rel="popover-below" title="' . _('ImageMagick Binary') . '" data-content="' . htmlspecialchars(_('This is typically located under /usr/bin (Linux), /opt/local/bin (Mac OSX) or the installation directory (Windows).')) . '" >' . _('can\'t be found') . '</a>')
+			)
+		);
+		
+		$form[] = array(
+			_('Path to Java'),
+			array(
+				'type' => 'input',
+				'name' => 'fs_serv_java_path',
+				'preferences' => 'fs_serv',
+				'help' => _('FoOlSlide\'s IRC bot "Curves" needs Java to run. Insert the path to your Java installation to be able to run Curves.')
 			)
 		);
 

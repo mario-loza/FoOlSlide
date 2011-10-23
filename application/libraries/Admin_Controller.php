@@ -77,6 +77,16 @@ class Admin_Controller extends MY_Controller
 			return $sidebar;
 		}
 
+		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
+			"level" => "member",
+			"default" => "http://ask.foolrulez.com",
+			"icon" => 423,
+			"content" => array(
+				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ"), "icon" => 356),
+				"http://wiki.foolslide.org/" => array("level" => "member", "name" => _("Bug tracker"), "icon" => 312),
+			)
+		);
+		
 		$sidebar["series"] = array(
 			"name" => _("Series"),
 			"level" => "mod",
@@ -113,13 +123,12 @@ class Admin_Controller extends MY_Controller
 				"advertising" => array("level" => "admin", "name" => _("Advertising"), "icon" => 285),
 			)
 		);
-		$sidebar["balancer"] = array("name" => _("Load Balancer"),
+		$sidebar["irc"] = array("name" => _("IRC \"Curves\""),
 			"level" => "admin",
-			"default" => "balancers",
-			"icon" => 255,
+			"default" => "general",
+			"icon" => 160,
 			"content" => array(
-				"balancers" => array("level" => "admin", "name" => _("Master"), "icon" => 121),
-				"client" => array("level" => "admin", "name" => _("Client"), "icon" => 120),
+				"general" => array("level" => "admin", "name" => _("General"), "icon" => 129),
 			)
 		);
 		$sidebar["system"] = array("name" => _("System"),
@@ -129,18 +138,18 @@ class Admin_Controller extends MY_Controller
 			"content" => array(
 				"information" => array("level" => "admin", "name" => _("Information"), "icon" => 150),
 				"preferences" => array("level" => "admin", "name" => _("Preferences") . ' <span class="label notice">' . _('New') . '</span>', "icon" => 149),
-				"tools" => array("level" => "admin", "name" => _("Tools") . ' <span class="label notice">' . _('New') . '</span>', "icon" => 351),
+				"tools" => array("level" => "admin", "name" => _("Tools"), "icon" => 351),
 				"upgrade" => array("level" => "admin", "name" => _("Upgrade") . ((get_setting('fs_cron_autoupgrade_version') && version_compare(FOOLSLIDE_VERSION, get_setting('fs_cron_autoupgrade_version')) < 0) ? ' <span class="label success">' . _('New') . '</span>' : ''), "icon" => 353),
 			)
 		);
 
-		$sidebar["meta"] = array("name" => "Meta", // no gettext because meta must be meta
-			"level" => "member",
-			"default" => "http://ask.foolrulez.com",
-			"icon" => 423,
+		$sidebar["balancer"] = array("name" => _("Load Balancer"),
+			"level" => "admin",
+			"default" => "balancers",
+			"icon" => 255,
 			"content" => array(
-				"http://ask.foolrulez.com" => array("level" => "member", "name" => _("Ask FoOlRulez & FAQ"), "icon" => 356),
-				"http://trac.foolrulez.com/foolslide" => array("level" => "member", "name" => _("Bug tracker"), "icon" => 312),
+				"balancers" => array("level" => "admin", "name" => _("Master"), "icon" => 121),
+				"client" => array("level" => "admin", "name" => _("Client"), "icon" => 120),
 			)
 		);
 
