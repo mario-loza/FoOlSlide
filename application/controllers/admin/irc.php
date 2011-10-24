@@ -16,6 +16,7 @@ class Irc extends Admin_Controller
 		$this->viewdata['controller_title'] = '<a href="' . site_url("admin/irc/general") . '">' . _('IRC bot "Curves"') . '</a>';
 	}
 
+
 	function general()
 	{
 		$data = array();
@@ -23,7 +24,8 @@ class Irc extends Admin_Controller
 		$this->viewdata["main_content_view"] = $this->load->view("admin/irc/general.php", $data, TRUE);
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
-	
+
+
 	function configuration()
 	{
 		$this->viewdata['function_title'] = _('Configuration');
@@ -37,7 +39,7 @@ class Irc extends Admin_Controller
 				'help' => _('The server to connect to, like irc.irchighway.net.')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Port'),
 			array(
@@ -47,18 +49,18 @@ class Irc extends Admin_Controller
 				'help' => _('The port to use to connect. Usually 6667.')
 			)
 		);
-		
+
 		$channels = @unserialize(get_setting('fs_curves_config_bot_channels'));
 		$form[] = array(
 			_('Channels'),
 			array(
 				'type' => 'input',
 				'name' => 'fs_curves_config_bot_channels',
-				'value' => ($channels)?$channels:array(),
+				'value' => ($channels) ? $channels : array(),
 				'help' => _('The channels your bot will connect to.')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Nickname'),
 			array(
@@ -67,8 +69,8 @@ class Irc extends Admin_Controller
 				'preferences' => 'fs_serv',
 				'help' => _('Your bot\'s nickname.')
 			)
-		);		
-		
+		);
+
 		$form[] = array(
 			_('Nickserv password'),
 			array(
@@ -78,7 +80,7 @@ class Irc extends Admin_Controller
 				'help' => _('The password to authenticate your nickname.')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Hostname'),
 			array(
@@ -88,7 +90,7 @@ class Irc extends Admin_Controller
 				'help' => _('Enter whatever you want.')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Server name'),
 			array(
@@ -98,7 +100,7 @@ class Irc extends Admin_Controller
 				'help' => _('Enter whatever you want.')
 			)
 		);
-		
+
 		$form[] = array(
 			_('Real name'),
 			array(
@@ -108,9 +110,9 @@ class Irc extends Admin_Controller
 				'help' => _('Enter whatever you want.')
 			)
 		);
-		
-		
-		
+
+
+
 		if ($post = $this->input->post())
 		{
 			$this->_submit($post, $form);
@@ -126,7 +128,7 @@ class Irc extends Admin_Controller
 		$this->load->view("admin/default.php", $this->viewdata);
 	}
 
-	
+
 	/*
 	 * _submit is a private function that submits to the "preferences" table.
 	 * entries that don't exist are created. the preferences table could get very large
@@ -170,15 +172,37 @@ class Irc extends Admin_Controller
 
 		set_notice('notice', _('Updated settings.'));
 	}
-	
+
+
 	function start()
 	{
-		$exec = "";
-		$exec .= get_setting('fs_serv_java_path') . ' -classpath ' . FCPATH . 'assets/curves/Curves';
+		$exec = '';
+		$home = FCPATH . 'assets/curves/Curves';
+		$main = 'curves.main.Main';
+
+		$libs = glob($home . '/lib/*.jar');
+		foreach ($libs as $key => $lib)
+		{
+			$libs[$key] = $home . '/lib/' . $lib;
+		}
+
+		$classpath = $home . ':' . $home . '/bin:' . implode(':', $libs);
+
+		echo $exec .= get_setting('fs_serv_java_path') . 
+				'java -classpath ' . $classpath .
+				' ' . $main . ' ' .
+				FCPATH. 'index.php ' .
+				$home.'/log4j.xml '.
+				'& echo $$ > ' . $home.'/curves.pid &';
+		
+		passthru($exec);
 	}
-	
+
+
 	function stop()
 	{
 		
 	}
+
+
 }

@@ -45,35 +45,33 @@ class Irc_cli extends REST_Controller
 						"classpath" => '',
 						"classname" => 'curves.trigger.system.Index',
 						"properties" => 'system.xml',
-						"critical" => true
+						"critical" => "true"
 					),
 					array(
 						"classpath" => '',
 						"classname" => 'curves.trigger.record.Index',
-						"critical" => true
+						"critical" => "true"
 					),
 					array(
 						"classpath" => '',
 						"classname" => 'curves.trigger.console.Index',
-						"critical" => true
+						"critical" => "true"
 					),
 					array(
 						"classpath" => '',
 						"classname" => 'curves.trigger.fileserver.Index',
 						"properties" => 'fileserver.xml',
-						"critical" => true
+						"critical" => "true"
 					),
 					array(
 						"classpath" => '',
 						"classname" => 'curves.trigger.query.Index',
 						"properties" => 'query.xml',
-						"critical" => false
 					),
 					array(
 						"classpath" => '',
 						"classname" => 'curves.trigger.foolrulez.Index',
 						"properties" => 'foolrulez.xml',
-						"critical" => false
 					),
 				),
 				"admins" => array(
