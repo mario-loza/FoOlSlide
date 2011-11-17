@@ -10,7 +10,7 @@ class Irc_cli extends REST_Controller
 		parent::__construct();
 		if(!$this->input->is_cli_request())
 		{
-			//show_404();
+			show_404();
 		}
 	}
 	
